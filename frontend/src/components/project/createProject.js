@@ -3,6 +3,7 @@ import { Link, Redirect } from 'react-router-dom'
 import icon from './images/icon.svg'
 import { connect } from 'react-redux'
 import { uploadProject } from '../../store/actions/projectAction'
+import Axios from 'axios'
 
 class CreateProject extends Component {
 
@@ -16,7 +17,7 @@ class CreateProject extends Component {
             category : '',
             goal : '',
             image : null,
-            url : '',
+            formData: ''
         }
 
         this.handleSubmit = this.handleSubmit.bind(this)
@@ -24,9 +25,15 @@ class CreateProject extends Component {
         this.handleChange = this.handleChange.bind(this)
     }
 
-    handleSubmit = (e) => {
+    handleSubmit = async (e) => {
         e.preventDefault()
-        console.log(this.state)
+        await Axios.post("http://localhost:3000/image/setimagebuffer",this.state.formData)
+            .then((data) => {
+                this.setState({
+                    imageID: data.data._id
+                })
+            })
+        // console.log(this.state)
         this.setState({
             authorName: this.props.auth.username,
             authorID: this.props.auth._id
@@ -42,23 +49,11 @@ class CreateProject extends Component {
     }
 
     handleImageChange = (e) => {
-        // if (e.target.files[0]) {
-        //     this.setState({
-        //         image : e.target.files[0]
-        //     })
-        // }
-        // let imageObj = {}
-        // let imageFormObj = new FormData()
-        // imageFormObj.append("imageName", "multer-image-" + Date.now())
-        // var statebody = Object.assign({},e.target,{files:null})
-        // var img =  e.target.files[0]
-        // imageFormObj.append("imageData", img) 
-        // console.log(imageFormObj.toString());
-        // console.log((e.target.files[0]));
-        // Axios.post('http://localhost:3000/image/uploadmulter', imageFormObj,{headers: {
-        //     'content-type': 'multipart/form-data'
-        //   }})
-        //     .then((res) => console.log(res))
+        const formData = new FormData()
+        formData.append('ImageData', e.target.files[0])
+        this.setState({
+            formData: formData
+        })
     }
 
     render() {
@@ -99,9 +94,9 @@ class CreateProject extends Component {
                                         <div className="form-group">
                                             <input type="text" className="form-control" id='goal' onChange = {this.handleChange} placeholder="Goal"/>
                                         </div>
-                                        {/* <div className="form-group">
+                                        <div className="form-group">
                                             <input type="file" className="form-control" id='image' onChange = {this.handleImageChange} placeholder="Goal"/>
-                                        </div> */}
+                                        </div>
                                         <button type="button"  onClick = {this.handleSubmit} className="btn btn-primary">Create</button>
                                     </div>
                                 </div>

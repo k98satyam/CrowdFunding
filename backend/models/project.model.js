@@ -8,7 +8,8 @@ const projectSchema = new Schema({
     category: { type: String, required: true, trim: true },
     description: { type: String, required: true, trim: true },
     goal: { type: Number, required: true, trim: true },
-    recived: { type: Number, required: true, trim: true }
+    recived: { type: Number, required: true, trim: true },
+    imageID: { type: String, required: true }
 }, { timestamps : true })
 
 const Project = mongoose.model('Project', projectSchema)

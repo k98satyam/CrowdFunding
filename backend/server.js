@@ -2,12 +2,16 @@ const express = require('express')
 const mongoose = require('mongoose')
 const projectRoute = require('./routes/project.route')
 const authRoutes = require('./routes/auth.routes')
+const imgRoutes = require('./routes/image.route')
 const passportSetup = require('./config/passport-setup')
 const passport = require('passport')
 const cookieSession = require('cookie-session')
 const cookieparser = require('cookie-parser')
 
 const app = express()
+
+//a folder created to store images 
+app.use('/uploads', express.static("uploads"))
 
 app.use(cookieSession({
     name: 'session',
@@ -24,6 +28,7 @@ app.use(passport.session())
 //cors allows to use stuff outside server into server
 //somewhat axios requests
 const cors = require('cors')
+const { static } = require('express')
 app.use(cors({
     origin: "http://localhost:3001", // allow to server to accept request from different origin
     methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
@@ -48,3 +53,4 @@ mongoose.connect(process.env.MONGO_URI, { useCreateIndex: true, useNewUrlParser:
 
 app.use('/auth',authRoutes)
 app.use('/project',projectRoute)
+app.use('/image',imgRoutes)

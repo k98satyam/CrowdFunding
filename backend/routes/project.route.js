@@ -29,7 +29,8 @@ router.post('/create', (req,res) => {
         category: req.body.category,
         description: req.body.description,
         goal: req.body.goal,
-        recived: 0
+        recived: 0,
+        imageID: req.body.imageID
     })
     project.save()
         .then((result) => {
